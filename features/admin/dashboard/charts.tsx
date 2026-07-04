@@ -1,12 +1,14 @@
 "use client";
 
-import { DonutChart, Legend } from "@tremor/react";
 import {
   Area,
   AreaChart,
   Bar,
   BarChart,
   CartesianGrid,
+  Cell,
+  Pie,
+  PieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -71,7 +73,15 @@ export function LeadSourceChart({ data }: { data: { source: string; count: numbe
   );
 }
 
-const STATUS_COLORS = ["slate", "blue", "indigo", "violet", "emerald", "red"] as const;
+const STATUS_COLORS: Record<string, string> = {
+  NEW: "var(--color-ink-faint)",
+  CONTACTED: "var(--color-accent-blue)",
+  QUALIFIED: "var(--color-accent-indigo)",
+  PROPOSAL: "var(--color-accent-purple)",
+  WON: "var(--color-accent-emerald)",
+  LOST: "#ef4444",
+};
+const FALLBACK_COLORS = ["var(--color-accent-blue)", "var(--color-accent-indigo)", "var(--color-accent-purple)", "var(--color-accent-emerald)", "var(--color-accent-cyan)", "#ef4444"];
 
 export function LeadStatusChart({ data }: { data: { status: string; count: number }[] }) {
   return (
@@ -80,16 +90,27 @@ export function LeadStatusChart({ data }: { data: { status: string; count: numbe
         <CardTitle>Pipeline by status</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col items-center gap-4">
-        <DonutChart
-          data={data}
-          category="count"
-          index="status"
-          colors={[...STATUS_COLORS]}
-          className="h-52"
-          showAnimation
-          valueFormatter={(v: number) => `${v} leads`}
-        />
-        <Legend categories={data.map((d) => d.status)} colors={[...STATUS_COLORS]} className="justify-center" />
+        <ResponsiveContainer width="100%" height={208}>
+          <PieChart>
+            <Pie data={data} dataKey="count" nameKey="status" innerRadius={56} outerRadius={84} paddingAngle={2}>
+              {data.map((entry, i) => (
+                <Cell key={entry.status} fill={STATUS_COLORS[entry.status] ?? FALLBACK_COLORS[i % FALLBACK_COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip contentStyle={tooltipStyle} formatter={(value) => `${value} leads`} />
+          </PieChart>
+        </ResponsiveContainer>
+        <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
+          {data.map((entry, i) => (
+            <div key={entry.status} className="flex items-center gap-1.5 text-xs text-ink-soft">
+              <span
+                className="h-2 w-2 rounded-full"
+                style={{ background: STATUS_COLORS[entry.status] ?? FALLBACK_COLORS[i % FALLBACK_COLORS.length] }}
+              />
+              {entry.status}
+            </div>
+          ))}
+        </div>
       </CardContent>
     </Card>
   );

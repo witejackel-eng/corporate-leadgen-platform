@@ -12,7 +12,7 @@ It's built as a portfolio-grade demonstration of production frontend and full-st
 - **Case studies** — four full, in-depth engagement write-ups (problem → research → architecture → results → lessons learned), each backed by a real relational schema.
 - **Blog** — Tiptap-powered rich text authoring in the admin, category/tag filtering, search, pagination, related posts, and a generated RSS feed.
 - **CRM** — a lead pipeline with statuses, tags, notes, activity timelines, assignment, email notifications (Resend), and CSV export.
-- **Admin dashboard** — analytics (Recharts + Tremor), full CRUD for every content type, role-based access (Admin / Editor / Viewer), scoped dark mode, and a media library backed by Cloudinary.
+- **Admin dashboard** — analytics (Recharts), full CRUD for every content type, role-based access (Admin / Editor / Viewer), scoped dark mode, and a media library backed by Cloudinary.
 - **Auth** — NextAuth v5: email/password, Google, GitHub, forgot/reset password, middleware-protected routes.
 - **SEO** — Metadata API, dynamic Open Graph images, Schema.org JSON-LD, sitemap.xml, robots.txt, canonical URLs, RSS.
 
@@ -26,7 +26,7 @@ It's built as a portfolio-grade demonstration of production frontend and full-st
 | 3D | React Three Fiber, Drei, hand-written GLSL shaders |
 | UI primitives | Radix UI + a small shadcn-style component layer |
 | Forms | React Hook Form + Zod |
-| Charts | Recharts, Tremor |
+| Charts | Recharts |
 | Database | PostgreSQL + Prisma ORM |
 | Auth | NextAuth v5 (Credentials, Google, GitHub) |
 | Email | Resend |

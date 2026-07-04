@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import type { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 import { requireStaff } from "@/lib/auth-guard";
@@ -59,7 +60,7 @@ export async function swapNavigationOrder(input: unknown): Promise<ActionResult>
   const { firstId, secondId } = parsed.data;
 
   try {
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       const [first, second] = await Promise.all([
         tx.navigationItem.findUniqueOrThrow({ where: { id: firstId } }),
         tx.navigationItem.findUniqueOrThrow({ where: { id: secondId } }),
