@@ -1,0 +1,233 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* Neutral surface system — warm white / soft gray / light beige, never pure black */
+  --color-canvas: #fbfaf8;
+  --color-canvas-soft: #f5f3f0;
+  --color-canvas-beige: #f2ede5;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f7f6f4;
+  --color-border: #e7e3dd;
+  --color-border-strong: #d8d2c8;
+
+  --color-ink: #16150f;
+  --color-ink-soft: #4a473e;
+  --color-ink-faint: #86816f;
+
+  /* Accents */
+  --color-accent-blue: #2563eb;
+  --color-accent-indigo: #6366f1;
+  --color-accent-purple: #8b5cf6;
+  --color-accent-emerald: #10b981;
+  --color-accent-cyan: #06b6d4;
+
+  --radius-card: 1.25rem;
+  --radius-control: 0.75rem;
+
+  --shadow-soft: 0 1px 2px rgba(22, 21, 15, 0.04), 0 8px 24px -8px rgba(22, 21, 15, 0.08);
+  --shadow-lift: 0 4px 12px rgba(22, 21, 15, 0.06), 0 24px 48px -16px rgba(22, 21, 15, 0.16);
+  --shadow-glow-blue: 0 0 0 1px rgba(37, 99, 235, 0.12), 0 16px 40px -12px rgba(37, 99, 235, 0.35);
+}
+
+/* Scoped dark theme — used only inside the admin dashboard shell, never on the marketing site */
+.dark {
+  --color-canvas: #0f1115;
+  --color-canvas-soft: #15181e;
+  --color-canvas-beige: #15181e;
+  --color-surface: #181b22;
+  --color-surface-muted: #1f232b;
+  --color-border: #2a2f3a;
+  --color-border-strong: #363c49;
+
+  --color-ink: #f3f2ef;
+  --color-ink-soft: #c7c4bb;
+  --color-ink-faint: #8b8a86;
+
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.2), 0 8px 24px -8px rgba(0, 0, 0, 0.35);
+  --shadow-lift: 0 4px 12px rgba(0, 0, 0, 0.25), 0 24px 48px -16px rgba(0, 0, 0, 0.5);
+}
+
+@theme inline {
+  --color-canvas: var(--color-canvas);
+  --color-canvas-soft: var(--color-canvas-soft);
+  --color-canvas-beige: var(--color-canvas-beige);
+  --color-surface: var(--color-surface);
+  --color-surface-muted: var(--color-surface-muted);
+  --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
+
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+  --color-ink-faint: var(--color-ink-faint);
+
+  --color-accent-blue: var(--color-accent-blue);
+  --color-accent-indigo: var(--color-accent-indigo);
+  --color-accent-purple: var(--color-accent-purple);
+  --color-accent-emerald: var(--color-accent-emerald);
+  --color-accent-cyan: var(--color-accent-cyan);
+
+  --radius-control: var(--radius-control);
+  --radius-card: var(--radius-card);
+
+  --shadow-soft: var(--shadow-soft);
+  --shadow-lift: var(--shadow-lift);
+  --shadow-glow-blue: var(--shadow-glow-blue);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --animate-marquee: marquee 32s linear infinite;
+  --animate-marquee-reverse: marquee-reverse 36s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-aurora: aurora 18s ease-in-out infinite;
+  --animate-accordion-down: accordion-down 0.25s ease-out;
+  --animate-accordion-up: accordion-up 0.25s ease-out;
+
+  @keyframes accordion-down {
+    from { height: 0; }
+    to { height: var(--radix-accordion-content-height); }
+  }
+  @keyframes accordion-up {
+    from { height: var(--radix-accordion-content-height); }
+    to { height: 0; }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes marquee-reverse {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-18px) rotate(3deg); }
+  }
+  @keyframes aurora {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(4%, -6%) scale(1.08); }
+    66% { transform: translate(-4%, 4%) scale(0.96); }
+  }
+}
+
+html {
+  scroll-behavior: auto;
+  color-scheme: light;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* ---------- Noise texture overlay ---------- */
+.bg-noise {
+  position: relative;
+  isolation: isolate;
+}
+.bg-noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 180px 180px;
+}
+
+/* ---------- Glass surfaces ---------- */
+.glass {
+  background: color-mix(in oklab, var(--color-surface) 72%, transparent);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid color-mix(in oklab, white 60%, var(--color-border));
+}
+
+.glass-dark {
+  background: color-mix(in oklab, var(--color-ink) 4%, white 96%);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+}
+
+/* ---------- Mesh gradient background ---------- */
+.mesh-gradient {
+  background-image:
+    radial-gradient(at 15% 20%, color-mix(in oklab, var(--color-accent-blue) 22%, transparent) 0px, transparent 55%),
+    radial-gradient(at 85% 10%, color-mix(in oklab, var(--color-accent-purple) 20%, transparent) 0px, transparent 55%),
+    radial-gradient(at 75% 80%, color-mix(in oklab, var(--color-accent-emerald) 16%, transparent) 0px, transparent 55%),
+    radial-gradient(at 20% 85%, color-mix(in oklab, var(--color-accent-cyan) 18%, transparent) 0px, transparent 55%);
+}
+
+.aurora-layer {
+  position: absolute;
+  inset: -20%;
+  background-image:
+    radial-gradient(40% 30% at 20% 30%, color-mix(in oklab, var(--color-accent-indigo) 30%, transparent), transparent 70%),
+    radial-gradient(35% 30% at 80% 20%, color-mix(in oklab, var(--color-accent-cyan) 26%, transparent), transparent 70%),
+    radial-gradient(45% 35% at 60% 80%, color-mix(in oklab, var(--color-accent-purple) 24%, transparent), transparent 70%);
+  filter: blur(60px);
+  animation: var(--animate-aurora);
+}
+
+/* ---------- Focus states (accessibility) ---------- */
+:focus-visible {
+  outline: 2px solid var(--color-accent-blue);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-accent-blue) 24%, transparent);
+  color: var(--color-ink);
+}
+
+/* ---------- Custom cursor ---------- */
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--color-ink);
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+}
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in oklab, var(--color-ink) 40%, transparent);
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+}
+
+@media (max-width: 768px) {
+  .cursor-dot,
+  .cursor-ring {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

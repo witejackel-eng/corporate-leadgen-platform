@@ -1,0 +1,517 @@
+// Corporate Lead Generation Platform — Database Schema
+// PostgreSQL + Prisma ORM
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// AUTH (NextAuth.js v5 — credentials + OAuth)
+// ============================================================
+
+enum UserRole {
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+model User {
+  id             String    @id @default(cuid())
+  name           String?
+  email          String    @unique
+  emailVerified  DateTime?
+  image          String?
+  passwordHash   String?
+  role           UserRole  @default(VIEWER)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  accounts       Account[]
+  sessions       Session[]
+  blogPosts      BlogPost[]
+  media          Media[]
+  assignedLeads  Lead[]          @relation("LeadAssignee")
+  leadNotes      LeadNote[]
+  leadActivities LeadActivity[]
+  resetTokens    PasswordResetToken[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  expires   DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("password_reset_tokens")
+}
+
+// ============================================================
+// PROJECTS (marketing showcase — external links only)
+// ============================================================
+
+model Project {
+  id              String   @id @default(cuid())
+  title           String
+  slug            String   @unique
+  category        String
+  summary         String
+  description     String   @db.Text
+  coverImage      String
+  gallery         String[] @default([])
+  technologies    String[] @default([])
+  liveUrl         String
+  metrics         Json?
+  featured        Boolean  @default(false)
+  order           Int      @default(0)
+  publishedAt     DateTime @default(now())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("projects")
+}
+
+// ============================================================
+// CASE STUDIES
+// ============================================================
+
+model CaseStudy {
+  id          String             @id @default(cuid())
+  title       String
+  slug        String             @unique
+  client      String
+  industry    String
+  category    String
+  summary     String
+  coverImage  String
+  heroImage   String
+  duration    String
+  team        String
+  role        String
+  technologies String[]          @default([])
+  metrics     Json
+  featured    Boolean            @default(false)
+  order       Int                @default(0)
+  seoTitle       String?
+  seoDescription String?
+  publishedAt DateTime           @default(now())
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  sections    CaseStudySection[]
+
+  @@map("case_studies")
+}
+
+enum CaseStudySectionKey {
+  OVERVIEW
+  PROBLEM
+  RESEARCH
+  DISCOVERY
+  COMPETITIVE_ANALYSIS
+  GOALS
+  WIREFRAMES
+  USER_FLOW
+  VISUAL_DESIGN
+  DESIGN_SYSTEM
+  DEVELOPMENT
+  ARCHITECTURE
+  PERFORMANCE
+  ACCESSIBILITY
+  SEO
+  TESTING
+  DEPLOYMENT
+  RESULTS
+  LESSONS_LEARNED
+}
+
+model CaseStudySection {
+  id          String               @id @default(cuid())
+  caseStudyId String
+  key         CaseStudySectionKey
+  title       String
+  body        String               @db.Text
+  images      String[]             @default([])
+  order       Int                  @default(0)
+
+  caseStudy CaseStudy @relation(fields: [caseStudyId], references: [id], onDelete: Cascade)
+
+  @@unique([caseStudyId, key])
+  @@map("case_study_sections")
+}
+
+// ============================================================
+// TESTIMONIALS & CLIENTS
+// ============================================================
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  role      String
+  company   String
+  avatar    String
+  quote     String   @db.Text
+  rating    Int      @default(5)
+  featured  Boolean  @default(false)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@map("testimonials")
+}
+
+model Client {
+  id     String  @id @default(cuid())
+  name   String
+  logo   String
+  url    String?
+  order  Int     @default(0)
+
+  @@map("clients")
+}
+
+// ============================================================
+// BLOG
+// ============================================================
+
+model BlogPost {
+  id             String     @id @default(cuid())
+  title          String
+  slug           String     @unique
+  excerpt        String
+  content        String     @db.Text
+  coverImage     String
+  published      Boolean    @default(false)
+  featured       Boolean    @default(false)
+  readingTime    Int        @default(1)
+  seoTitle       String?
+  seoDescription String?
+  authorId       String
+  categoryId     String?
+  publishedAt    DateTime?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  author   User      @relation(fields: [authorId], references: [id])
+  category Category? @relation(fields: [categoryId], references: [id])
+  tags     TagsOnPosts[]
+
+  @@map("blog_posts")
+}
+
+model Category {
+  id    String     @id @default(cuid())
+  name  String
+  slug  String     @unique
+  posts BlogPost[]
+
+  @@map("categories")
+}
+
+model Tag {
+  id    String        @id @default(cuid())
+  name  String
+  slug  String        @unique
+  posts TagsOnPosts[]
+
+  @@map("tags")
+}
+
+model TagsOnPosts {
+  postId String
+  tagId  String
+
+  post BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag  Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
+  @@map("tags_on_posts")
+}
+
+// ============================================================
+// FAQ
+// ============================================================
+
+model Faq {
+  id       String @id @default(cuid())
+  question String
+  answer   String @db.Text
+  category String @default("General")
+  order    Int    @default(0)
+
+  @@map("faqs")
+}
+
+// ============================================================
+// LEAD MANAGEMENT (CRM)
+// ============================================================
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  PROPOSAL
+  WON
+  LOST
+}
+
+enum LeadSource {
+  CONTACT_FORM
+  DEMO_REQUEST
+  NEWSLETTER
+  REFERRAL
+  LINKEDIN
+  WEBSITE_CHAT
+  EVENT
+  OTHER
+}
+
+model Lead {
+  id           String     @id @default(cuid())
+  name         String
+  email        String
+  phone        String?
+  company      String?
+  jobTitle     String?
+  message      String?    @db.Text
+  source       LeadSource @default(CONTACT_FORM)
+  status       LeadStatus @default(NEW)
+  value        Decimal?   @db.Decimal(12, 2)
+  assignedToId String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  assignedTo User?          @relation("LeadAssignee", fields: [assignedToId], references: [id])
+  tags       LeadTagsOnLeads[]
+  notes      LeadNote[]
+  activities LeadActivity[]
+
+  @@map("leads")
+}
+
+model LeadTag {
+  id    String @id @default(cuid())
+  name  String @unique
+  color String @default("#6366f1")
+
+  leads LeadTagsOnLeads[]
+
+  @@map("lead_tags")
+}
+
+model LeadTagsOnLeads {
+  leadId String
+  tagId  String
+
+  lead Lead    @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  tag  LeadTag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([leadId, tagId])
+  @@map("lead_tags_on_leads")
+}
+
+model LeadNote {
+  id        String   @id @default(cuid())
+  leadId    String
+  authorId  String
+  body      String   @db.Text
+  createdAt DateTime @default(now())
+
+  lead   Lead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id])
+
+  @@map("lead_notes")
+}
+
+enum LeadActivityType {
+  CREATED
+  STATUS_CHANGE
+  NOTE_ADDED
+  ASSIGNED
+  EMAIL_SENT
+  TAG_ADDED
+  TAG_REMOVED
+}
+
+model LeadActivity {
+  id          String           @id @default(cuid())
+  leadId      String
+  userId      String?
+  type        LeadActivityType
+  description String
+  createdAt   DateTime         @default(now())
+
+  lead Lead  @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("lead_activities")
+}
+
+// ============================================================
+// FORMS / MESSAGES (generic inbound submissions)
+// ============================================================
+
+enum MessageType {
+  CONTACT
+  NEWSLETTER
+  DEMO_REQUEST
+  SUPPORT
+}
+
+model Message {
+  id        String      @id @default(cuid())
+  type      MessageType
+  name      String?
+  email     String
+  subject   String?
+  body      String      @db.Text
+  data      Json?
+  read      Boolean     @default(false)
+  createdAt DateTime    @default(now())
+
+  @@map("messages")
+}
+
+// ============================================================
+// MEDIA LIBRARY
+// ============================================================
+
+model Media {
+  id           String   @id @default(cuid())
+  url          String
+  cloudinaryId String?
+  type         String
+  alt          String?
+  width        Int?
+  height       Int?
+  size         Int?
+  folder       String   @default("uploads")
+  uploadedById String?
+  createdAt    DateTime @default(now())
+
+  uploadedBy User? @relation(fields: [uploadedById], references: [id])
+
+  @@map("media")
+}
+
+// ============================================================
+// CMS: NAVIGATION, HOMEPAGE BLOCKS, SITE SETTINGS
+// ============================================================
+
+enum NavLocation {
+  HEADER
+  FOOTER
+}
+
+model NavigationItem {
+  id       String      @id @default(cuid())
+  label    String
+  href     String
+  location NavLocation
+  order    Int         @default(0)
+  parentId String?
+
+  parent   NavigationItem?  @relation("NavChildren", fields: [parentId], references: [id], onDelete: Cascade)
+  children NavigationItem[] @relation("NavChildren")
+
+  @@map("navigation_items")
+}
+
+model Stat {
+  id     String @id @default(cuid())
+  label  String
+  value  String
+  suffix String @default("")
+  icon   String @default("TrendingUp")
+  order  Int    @default(0)
+
+  @@map("stats")
+}
+
+model Feature {
+  id          String @id @default(cuid())
+  title       String
+  description String @db.Text
+  icon        String @default("Sparkles")
+  order       Int    @default(0)
+
+  @@map("features")
+}
+
+model Benefit {
+  id          String @id @default(cuid())
+  title       String
+  description String @db.Text
+  icon        String @default("CheckCircle2")
+  order       Int    @default(0)
+
+  @@map("benefits")
+}
+
+model SiteSettings {
+  id               String @id @default("singleton")
+  siteName         String @default("Meridian")
+  siteTagline      String @default("The revenue engine for enterprise marketing teams")
+  siteDescription  String @default("")
+  logoUrl          String @default("/logo.svg")
+  faviconUrl       String @default("/favicon.ico")
+  contactEmail     String @default("hello@meridian.io")
+  contactPhone     String @default("")
+  address          String @default("")
+  socialLinks      Json   @default("{}")
+  seoDefaultTitle  String @default("")
+  seoDefaultDesc   String @default("")
+  ogImage          String @default("/og-image.png")
+  gaMeasurementId  String @default("")
+  updatedAt        DateTime @updatedAt
+
+  @@map("site_settings")
+}
