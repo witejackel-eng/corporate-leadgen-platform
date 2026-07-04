@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   BarChart3,
   Briefcase,
+  Compass,
   FileText,
   FolderKanban,
   HelpCircle,
@@ -32,6 +33,7 @@ const NAV = [
     section: "Content",
     items: [
       { href: "/admin/homepage", label: "Homepage", icon: LayoutDashboard },
+      { href: "/admin/navigation", label: "Navigation", icon: Compass },
       { href: "/admin/blog", label: "Blog", icon: FileText },
       { href: "/admin/projects", label: "Projects", icon: FolderKanban },
       { href: "/admin/case-studies", label: "Case Studies", icon: Briefcase },

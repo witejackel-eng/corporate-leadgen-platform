@@ -152,7 +152,7 @@ Several integrations are optional at runtime and fail gracefully rather than cra
 
 Built for a single, continuous engineering pass rather than a multi-week team effort. A few areas were intentionally scoped down rather than left as broken placeholders:
 
-- **Navigation CMS** — the `NavigationItem` model and header/footer links exist, but there's no dedicated drag-and-drop admin UI for reordering nav items yet (edit via Prisma Studio or extend `/admin/homepage` with a similar pattern).
+- **Navigation CMS** — the site header's links are fully CMS-editable at `/admin/navigation` (add, edit, reorder, delete), backed by the `NavigationItem` model with the same DB-fallback pattern as the rest of the site. The footer's four link columns remain static by design — footer information architecture rarely needs runtime editing, and the model doesn't currently group items by column.
 - **Analytics** — the dashboard's traffic/signup chart uses illustrative sample data; lead-sourced metrics (pipeline, status, source breakdown) are fully real, computed from your database. Wire up GA4/Plausible for real traffic data.
 - **"View Project" links** — the four engineering-showcase cards link to specific folders in this repository's own source code rather than external client sites, since the four projects described are subsystems of this same platform (attribution engine, WebGL layer, admin/CRM console, CMS) — not four unrelated client engagements needing external URLs.
 

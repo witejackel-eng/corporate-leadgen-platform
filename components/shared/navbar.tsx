@@ -8,10 +8,11 @@ import { useSession } from "next-auth/react";
 
 import { Button } from "@/components/ui/button";
 import { Magnetic } from "@/components/shared/magnetic-button";
-import { NAV_LINKS, SITE_CONFIG } from "@/lib/constants";
+import { SITE_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import type { NavLink } from "@/server/queries/navigation";
 
-export function Navbar() {
+export function Navbar({ navLinks }: { navLinks: NavLink[] }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { data: session } = useSession();
@@ -37,9 +38,9 @@ export function Navbar() {
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
-          {NAV_LINKS.map((link) => (
+          {navLinks.map((link) => (
             <Link
-              key={link.href}
+              key={link.id ?? link.href}
               href={link.href}
               data-cursor-hover
               className="relative rounded-full px-4 py-2 text-sm font-medium text-ink-soft transition-colors hover:text-ink"
@@ -87,9 +88,9 @@ export function Navbar() {
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className="glass absolute inset-x-4 top-20 z-40 flex flex-col gap-1 rounded-3xl p-4 shadow-lift md:hidden"
           >
-            {NAV_LINKS.map((link) => (
+            {navLinks.map((link) => (
               <Link
-                key={link.href}
+                key={link.id ?? link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
                 className="rounded-2xl px-4 py-3 text-sm font-medium text-ink-soft hover:bg-ink/5 hover:text-ink"

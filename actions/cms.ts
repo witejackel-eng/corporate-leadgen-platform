@@ -2,18 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 
-import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { requireStaff } from "@/lib/auth-guard";
 import { clientSchema, faqSchema, projectSchema, testimonialSchema } from "@/lib/validations/cms";
 import type { ActionResult } from "@/actions/leads";
-
-async function requireStaff() {
-  const session = await auth();
-  if (!session?.user || (session.user.role !== "ADMIN" && session.user.role !== "EDITOR")) {
-    throw new Error("Unauthorized");
-  }
-  return session;
-}
 
 // ---------- Testimonials ----------
 

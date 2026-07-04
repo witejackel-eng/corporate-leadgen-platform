@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/auth";
+import { requireStaff } from "@/lib/auth-guard";
 import { sendLeadConfirmation, sendLeadNotification, sendNewsletterWelcome } from "@/services/email";
 import {
   contactFormSchema,
@@ -85,14 +85,6 @@ export async function subscribeToNewsletter(input: unknown): Promise<ActionResul
   await sendNewsletterWelcome(parsed.data.email);
 
   return { success: true };
-}
-
-async function requireStaff() {
-  const session = await auth();
-  if (!session?.user || (session.user.role !== "ADMIN" && session.user.role !== "EDITOR")) {
-    throw new Error("Unauthorized");
-  }
-  return session;
 }
 
 export async function updateLeadStatus(input: unknown): Promise<ActionResult> {
