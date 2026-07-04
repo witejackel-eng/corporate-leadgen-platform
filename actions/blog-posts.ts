@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import { prisma } from "@/lib/prisma";
 import { requireStaff } from "@/lib/auth-guard";
+import { sanitizeRichText } from "@/lib/sanitize";
 import { blogPostSchema } from "@/lib/validations/cms";
 import type { ActionResult } from "@/actions/leads";
 
@@ -37,6 +38,7 @@ export async function upsertBlogPost(input: unknown): Promise<ActionResult> {
   if (!parsed.success) return { success: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
   const { id, tags, category, published, ...data } = parsed.data;
+  data.content = sanitizeRichText(data.content);
   const categoryId = await resolveCategoryId(category);
   const readingTime = estimateReadingTime(data.content);
   const tagNames = (tags ?? "").split(",").map((t) => t.trim()).filter(Boolean);

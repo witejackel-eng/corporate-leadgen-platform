@@ -17,10 +17,33 @@ interface UploadResultInput {
   alt?: string;
 }
 
+function isTrustedCloudinaryUrl(url: string): boolean {
+  const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+  if (!cloudName) return false;
+
+  try {
+    const parsed = new URL(url);
+    return (
+      parsed.protocol === "https:" &&
+      parsed.hostname === "res.cloudinary.com" &&
+      parsed.pathname.startsWith(`/${cloudName}/`)
+    );
+  } catch {
+    return false;
+  }
+}
+
 export async function persistMediaRecord(input: UploadResultInput): Promise<ActionResult> {
   const session = await auth();
   if (!session?.user || (session.user.role !== "ADMIN" && session.user.role !== "EDITOR")) {
     return { success: false, error: "Unauthorized" };
+  }
+
+  // The upload widget runs entirely client-side; this call only reports what
+  // it claims happened. Reject anything that isn't actually hosted on our
+  // own Cloudinary account before trusting it as a "Media" record.
+  if (!isTrustedCloudinaryUrl(input.url)) {
+    return { success: false, error: "That upload could not be verified." };
   }
 
   await prisma.media.create({

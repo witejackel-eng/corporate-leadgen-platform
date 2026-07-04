@@ -1,3 +1,5 @@
+import { escapeHtml } from "@/lib/sanitize";
+
 const wrapper = (title: string, body: string) => `
 <!DOCTYPE html>
 <html>
@@ -37,12 +39,12 @@ export function leadNotificationEmail(params: {
   return wrapper(
     "New lead captured",
     `
-    <p style="font-size:14px;color:#4a473e;line-height:1.6;">A new lead just came in through <strong>${params.source}</strong>.</p>
+    <p style="font-size:14px;color:#4a473e;line-height:1.6;">A new lead just came in through <strong>${escapeHtml(params.source)}</strong>.</p>
     <table role="presentation" style="width:100%;margin-top:16px;font-size:14px;color:#16150f;">
-      <tr><td style="padding:6px 0;color:#86816f;width:120px;">Name</td><td style="padding:6px 0;">${params.name}</td></tr>
-      <tr><td style="padding:6px 0;color:#86816f;">Email</td><td style="padding:6px 0;">${params.email}</td></tr>
-      <tr><td style="padding:6px 0;color:#86816f;">Company</td><td style="padding:6px 0;">${params.company ?? "—"}</td></tr>
-      ${params.message ? `<tr><td style="padding:6px 0;color:#86816f;vertical-align:top;">Message</td><td style="padding:6px 0;">${params.message}</td></tr>` : ""}
+      <tr><td style="padding:6px 0;color:#86816f;width:120px;">Name</td><td style="padding:6px 0;">${escapeHtml(params.name)}</td></tr>
+      <tr><td style="padding:6px 0;color:#86816f;">Email</td><td style="padding:6px 0;">${escapeHtml(params.email)}</td></tr>
+      <tr><td style="padding:6px 0;color:#86816f;">Company</td><td style="padding:6px 0;">${escapeHtml(params.company ?? "—")}</td></tr>
+      ${params.message ? `<tr><td style="padding:6px 0;color:#86816f;vertical-align:top;">Message</td><td style="padding:6px 0;">${escapeHtml(params.message)}</td></tr>` : ""}
     </table>
     `
   );
@@ -50,7 +52,7 @@ export function leadNotificationEmail(params: {
 
 export function leadConfirmationEmail(name: string) {
   return wrapper(
-    `Thanks for reaching out, ${name.split(" ")[0]}`,
+    `Thanks for reaching out, ${escapeHtml(name.split(" ")[0])}`,
     `<p style="font-size:14px;color:#4a473e;line-height:1.6;">We received your message and a member of our revenue team will follow up within one business day. In the meantime, feel free to explore our <a href="${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/case-studies" style="color:#2563eb;">latest case studies</a>.</p>`
   );
 }

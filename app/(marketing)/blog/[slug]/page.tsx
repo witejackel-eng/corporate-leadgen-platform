@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Reveal } from "@/components/shared/reveal";
 import { BlogCard } from "@/features/blog/blog-card";
 import { formatDate } from "@/lib/utils";
+import { sanitizeRichText } from "@/lib/sanitize";
 
 export async function generateStaticParams() {
   const posts = await getBlogPosts();
@@ -84,7 +85,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </Reveal>
 
         <Reveal direction="up" delay={0.25}>
-          <div className="prose prose-neutral mt-10 max-w-none prose-headings:font-display prose-headings:tracking-tight prose-a:text-accent-blue" dangerouslySetInnerHTML={{ __html: post.content }} />
+          <div className="prose prose-neutral mt-10 max-w-none prose-headings:font-display prose-headings:tracking-tight prose-a:text-accent-blue" dangerouslySetInnerHTML={{ __html: sanitizeRichText(post.content) }} />
         </Reveal>
 
         <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-8">
