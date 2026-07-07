@@ -1,5 +1,15 @@
 # Meridian — Corporate Lead Generation Platform
 
+[![Live Demo](https://img.shields.io/badge/demo-corporate--leadgen--platform.vercel.app-brightgreen?style=flat-square)](https://corporate-leadgen-platform.vercel.app)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js)](https://nextjs.org)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
+[![Prisma](https://img.shields.io/badge/Prisma-6-2D3748?style=flat-square&logo=prisma)](https://www.prisma.io)
+[![NextAuth](https://img.shields.io/badge/NextAuth-v5-blue?style=flat-square)](https://authjs.dev)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-38BDF8?style=flat-square&logo=tailwindcss)](https://tailwindcss.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](./LICENSE)
+
+
 Meridian is a full-stack enterprise marketing platform: a WebGL-driven marketing site, a headless CMS, a lead CRM, and an authenticated admin dashboard, all in one Next.js 15 codebase.
 
 It's built as a portfolio-grade demonstration of production frontend and full-stack engineering — real database schema, real server actions, real auth, real charts — not a static template.
