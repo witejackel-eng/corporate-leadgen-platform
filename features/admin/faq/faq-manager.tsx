@@ -106,10 +106,10 @@ export function FaqManager({ faqs }: { faqs: FaqRow[] }) {
               <AccordionItem key={f.id} value={f.id} className="px-4">
                 <div className="flex items-center gap-2">
                   <AccordionTrigger className="flex-1">{f.question}</AccordionTrigger>
-                  <Button size="icon" variant="ghost" onClick={() => openEdit(f)}>
+                  <Button size="icon" variant="ghost" aria-label="Edit FAQ" onClick={() => openEdit(f)}>
                     <Pencil className="h-4 w-4" />
                   </Button>
-                  <Button size="icon" variant="ghost" onClick={() => onDelete(f.id)}>
+                  <Button size="icon" variant="ghost" aria-label="Delete FAQ" onClick={() => onDelete(f.id)}>
                     <Trash2 className="h-4 w-4 text-red-500" />
                   </Button>
                 </div>

@@ -73,12 +73,12 @@ export function BlogPostTable({ posts }: { posts: PostRow[] }) {
                 </TableCell>
                 <TableCell className="text-sm text-ink-faint">{formatDate(post.createdAt)}</TableCell>
                 <TableCell className="flex justify-end gap-2">
-                  <Button size="icon" variant="ghost" asChild>
+                  <Button size="icon" variant="ghost" aria-label="Edit blog post" asChild>
                     <Link href={`/admin/blog/${post.id}`}>
                       <Pencil className="h-4 w-4" />
                     </Link>
                   </Button>
-                  <Button size="icon" variant="ghost" disabled={isPending} onClick={() => onDelete(post.id)}>
+                  <Button size="icon" variant="ghost" aria-label="Delete blog post" disabled={isPending} onClick={() => onDelete(post.id)}>
                     <Trash2 className="h-4 w-4 text-red-500" />
                   </Button>
                 </TableCell>

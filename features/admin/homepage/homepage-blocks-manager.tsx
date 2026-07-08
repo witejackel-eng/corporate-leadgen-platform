@@ -154,12 +154,13 @@ export function HomepageBlocksManager({
                     {s.suffix}
                   </TableCell>
                   <TableCell className="flex justify-end gap-2">
-                    <Button size="icon" variant="ghost" onClick={() => statDialog.openEdit(s)}>
+                    <Button size="icon" variant="ghost" aria-label="Edit stat" onClick={() => statDialog.openEdit(s)}>
                       <Pencil className="h-4 w-4" />
                     </Button>
                     <Button
                       size="icon"
                       variant="ghost"
+                      aria-label="Delete stat"
                       onClick={() => startTransition(async () => { await deleteStat(s.id); router.refresh(); })}
                     >
                       <Trash2 className="h-4 w-4 text-red-500" />
@@ -215,12 +216,13 @@ export function HomepageBlocksManager({
                   <TableCell className="font-medium text-ink">{f.title}</TableCell>
                   <TableCell className="max-w-md truncate text-ink-faint">{f.description}</TableCell>
                   <TableCell className="flex justify-end gap-2">
-                    <Button size="icon" variant="ghost" onClick={() => featureDialog.openEdit(f)}>
+                    <Button size="icon" variant="ghost" aria-label="Edit testimonial" onClick={() => featureDialog.openEdit(f)}>
                       <Pencil className="h-4 w-4" />
                     </Button>
                     <Button
                       size="icon"
                       variant="ghost"
+                      aria-label="Delete testimonial"
                       onClick={() => startTransition(async () => { await deleteFeature(f.id); router.refresh(); })}
                     >
                       <Trash2 className="h-4 w-4 text-red-500" />
@@ -276,12 +278,13 @@ export function HomepageBlocksManager({
                   <TableCell className="font-medium text-ink">{b.title}</TableCell>
                   <TableCell className="max-w-md truncate text-ink-faint">{b.description}</TableCell>
                   <TableCell className="flex justify-end gap-2">
-                    <Button size="icon" variant="ghost" onClick={() => benefitDialog.openEdit(b)}>
+                    <Button size="icon" variant="ghost" aria-label="Edit FAQ" onClick={() => benefitDialog.openEdit(b)}>
                       <Pencil className="h-4 w-4" />
                     </Button>
                     <Button
                       size="icon"
                       variant="ghost"
+                      aria-label="Delete FAQ"
                       onClick={() => startTransition(async () => { await deleteBenefit(b.id); router.refresh(); })}
                     >
                       <Trash2 className="h-4 w-4 text-red-500" />

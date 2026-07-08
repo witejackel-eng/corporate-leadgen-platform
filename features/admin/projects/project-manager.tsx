@@ -173,10 +173,10 @@ export function ProjectManager({ projects }: { projects: ProjectRow[] }) {
                 <TableCell className="text-xs text-ink-faint">{p.technologies.join(", ")}</TableCell>
                 <TableCell>{p.featured ? "Yes" : "No"}</TableCell>
                 <TableCell className="flex justify-end gap-2">
-                  <Button size="icon" variant="ghost" onClick={() => openEdit(p)}>
+                  <Button size="icon" variant="ghost" aria-label="Edit project" onClick={() => openEdit(p)}>
                     <Pencil className="h-4 w-4" />
                   </Button>
-                  <Button size="icon" variant="ghost" onClick={() => onDelete(p.id)}>
+                  <Button size="icon" variant="ghost" aria-label="Delete project" onClick={() => onDelete(p.id)}>
                     <Trash2 className="h-4 w-4 text-red-500" />
                   </Button>
                 </TableCell>

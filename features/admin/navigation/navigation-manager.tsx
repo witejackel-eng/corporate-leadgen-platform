@@ -132,16 +132,16 @@ export function NavigationManager({ items }: { items: NavItemRow[] }) {
                 <TableCell className="font-medium text-ink">{item.label}</TableCell>
                 <TableCell className="text-ink-faint">{item.href}</TableCell>
                 <TableCell className="flex justify-end gap-2">
-                  <Button size="icon" variant="ghost" disabled={i === 0 || isPending} onClick={() => move(i, -1)}>
+                  <Button size="icon" variant="ghost" aria-label="Move up" disabled={i === 0 || isPending} onClick={() => move(i, -1)}>
                     <ArrowUp className="h-4 w-4" />
                   </Button>
-                  <Button size="icon" variant="ghost" disabled={i === sorted.length - 1 || isPending} onClick={() => move(i, 1)}>
+                  <Button size="icon" variant="ghost" aria-label="Move down" disabled={i === sorted.length - 1 || isPending} onClick={() => move(i, 1)}>
                     <ArrowDown className="h-4 w-4" />
                   </Button>
-                  <Button size="icon" variant="ghost" onClick={() => openEdit(item)}>
+                  <Button size="icon" variant="ghost" aria-label="Edit nav item" onClick={() => openEdit(item)}>
                     <Pencil className="h-4 w-4" />
                   </Button>
-                  <Button size="icon" variant="ghost" onClick={() => onDelete(item.id)}>
+                  <Button size="icon" variant="ghost" aria-label="Delete nav item" onClick={() => onDelete(item.id)}>
                     <Trash2 className="h-4 w-4 text-red-500" />
                   </Button>
                 </TableCell>

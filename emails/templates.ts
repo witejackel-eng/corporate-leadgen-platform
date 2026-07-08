@@ -2,7 +2,7 @@ import { escapeHtml } from "@/lib/sanitize";
 
 const wrapper = (title: string, body: string) => `
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <body style="margin:0;padding:32px 16px;background:#fbfaf8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif;">
     <table role="presentation" width="100%" style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:20px;border:1px solid #e7e3dd;overflow:hidden;">
       <tr>

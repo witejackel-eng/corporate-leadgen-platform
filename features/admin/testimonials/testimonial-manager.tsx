@@ -151,10 +151,10 @@ export function TestimonialManager({ testimonials }: { testimonials: Testimonial
                 </TableCell>
                 <TableCell>{t.featured ? "Yes" : "No"}</TableCell>
                 <TableCell className="flex justify-end gap-2">
-                  <Button size="icon" variant="ghost" onClick={() => openEdit(t)}>
+                  <Button size="icon" variant="ghost" aria-label="Edit testimonial" onClick={() => openEdit(t)}>
                     <Pencil className="h-4 w-4" />
                   </Button>
-                  <Button size="icon" variant="ghost" onClick={() => onDelete(t.id)}>
+                  <Button size="icon" variant="ghost" aria-label="Delete testimonial" onClick={() => onDelete(t.id)}>
                     <Trash2 className="h-4 w-4 text-red-500" />
                   </Button>
                 </TableCell>

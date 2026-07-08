@@ -113,10 +113,10 @@ export function ClientManager({ clients }: { clients: ClientRow[] }) {
                 <TableCell className="font-medium text-ink">{c.name}</TableCell>
                 <TableCell className="text-ink-faint">{c.url || "—"}</TableCell>
                 <TableCell className="flex justify-end gap-2">
-                  <Button size="icon" variant="ghost" onClick={() => openEdit(c)}>
+                  <Button size="icon" variant="ghost" aria-label="Edit client" onClick={() => openEdit(c)}>
                     <Pencil className="h-4 w-4" />
                   </Button>
-                  <Button size="icon" variant="ghost" onClick={() => onDelete(c.id)}>
+                  <Button size="icon" variant="ghost" aria-label="Delete client" onClick={() => onDelete(c.id)}>
                     <Trash2 className="h-4 w-4 text-red-500" />
                   </Button>
                 </TableCell>

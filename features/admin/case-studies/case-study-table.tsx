@@ -72,12 +72,12 @@ export function CaseStudyTable({ caseStudies }: { caseStudies: Row[] }) {
                 </TableCell>
                 <TableCell>{cs.featured ? "Yes" : "No"}</TableCell>
                 <TableCell className="flex justify-end gap-2">
-                  <Button size="icon" variant="ghost" asChild>
+                  <Button size="icon" variant="ghost" aria-label="Edit case study" asChild>
                     <Link href={`/admin/case-studies/${cs.id}`}>
                       <Pencil className="h-4 w-4" />
                     </Link>
                   </Button>
-                  <Button size="icon" variant="ghost" disabled={isPending} onClick={() => onDelete(cs.id)}>
+                  <Button size="icon" variant="ghost" aria-label="Delete case study" disabled={isPending} onClick={() => onDelete(cs.id)}>
                     <Trash2 className="h-4 w-4 text-red-500" />
                   </Button>
                 </TableCell>

@@ -74,10 +74,10 @@ export function MessageTable({ messages }: { messages: MessageRow[] }) {
               <TableCell className="max-w-xs truncate text-sm text-ink-faint">{m.subject ?? m.body}</TableCell>
               <TableCell className="text-sm text-ink-faint">{formatDate(m.createdAt)}</TableCell>
               <TableCell className="flex justify-end gap-2">
-                <Button size="icon" variant="ghost" disabled={isPending} onClick={() => toggleRead(m.id, m.read)}>
+                <Button size="icon" variant="ghost" aria-label="Mark as read" disabled={isPending} onClick={() => toggleRead(m.id, m.read)}>
                   {m.read ? <MailOpen className="h-4 w-4" /> : <Mail className="h-4 w-4 text-accent-blue" />}
                 </Button>
-                <Button size="icon" variant="ghost" disabled={isPending} onClick={() => onDelete(m.id)}>
+                <Button size="icon" variant="ghost" aria-label="Delete message" disabled={isPending} onClick={() => onDelete(m.id)}>
                   <Trash2 className="h-4 w-4 text-red-500" />
                 </Button>
               </TableCell>

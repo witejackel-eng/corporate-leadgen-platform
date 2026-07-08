@@ -159,7 +159,7 @@ export function CaseStudyForm({ initialValues }: { initialValues?: FormValues })
                 </SelectContent>
               </Select>
               <Input placeholder="Section title" {...form.register(`sections.${index}.title`)} />
-              <Button type="button" size="icon" variant="ghost" onClick={() => remove(index)}>
+              <Button type="button" size="icon" variant="ghost" aria-label="Remove" onClick={() => remove(index)}>
                 <Trash2 className="h-4 w-4 text-red-500" />
               </Button>
             </div>
