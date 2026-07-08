@@ -168,4 +168,4 @@ Built for a single, continuous engineering pass rather than a multi-week team ef
 
 ## License
 
-Proprietary — built as a portfolio/demonstration project.
+MIT — see [LICENSE](./LICENSE).
